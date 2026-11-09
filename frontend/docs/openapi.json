@@ -1,0 +1,4696 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Waliin",
+    "description": "Backend API for tracking medical equipment lifecycles in Ethiopian hospitals",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Login",
+        "operationId": "login_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CurrentUser" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Logout",
+        "operationId": "logout_auth_logout_post",
+        "responses": { "204": { "description": "Successful Response" } }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "tags": ["auth"],
+        "summary": "Me",
+        "operationId": "me_auth_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CurrentUser" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/mfa/setup": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Mfa Setup",
+        "operationId": "mfa_setup_auth_mfa_setup_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/auth/mfa/confirm": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Mfa Confirm",
+        "operationId": "mfa_confirm_auth_mfa_confirm_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MfaCodeRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/mfa/verify": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Mfa Verify",
+        "operationId": "mfa_verify_auth_mfa_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MfaCodeRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/accept-invite": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Accept Invite",
+        "operationId": "accept_invite_auth_accept_invite_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AcceptInviteRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Forgot Password",
+        "operationId": "forgot_password_auth_forgot_password_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ForgotPasswordRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/reset-password": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Reset Password",
+        "operationId": "reset_password_auth_reset_password_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ResetPasswordRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Invite User",
+        "operationId": "invite_user_users_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/InviteUserRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserOut" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["users"],
+        "summary": "List Users",
+        "operationId": "list_users_users_get",
+        "parameters": [
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "$ref": "#/components/schemas/UserRole" },
+                { "type": "null" }
+              ],
+              "title": "Role"
+            }
+          },
+          {
+            "name": "department_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                { "type": "string", "format": "uuid" },
+                { "type": "null" }
+              ],
+              "title": "Department Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/UserOut" },
+                  "title": "Response List Users Users Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "patch": {
+        "tags": ["users"],
+        "summary": "Update User",
+        "operationId": "update_user_users__user_id__patch",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "User Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateUserRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserOut" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/resend-invite": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Resend Invite",
+        "operationId": "resend_invite_users__user_id__resend_invite_post",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "User Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserOut" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/revoke": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Revoke User",
+        "operationId": "revoke_user_users__user_id__revoke_post",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "User Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserOut" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/send-reset-link": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Send Reset Link",
+        "operationId": "send_reset_link_users__user_id__send_reset_link_post",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "User Id" }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dashboard/summary": {
+      "get": {
+        "tags": ["Dashboard"],
+        "summary": "Get Dashboard Summary",
+        "operationId": "get_dashboard_summary_dashboard_summary_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DashboardSummary" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment/departments": {
+      "get": {
+        "tags": ["equipment"],
+        "summary": "List Departments",
+        "operationId": "list_departments_equipment_departments_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DepartmentResponse"
+                  },
+                  "type": "array",
+                  "title": "Response List Departments Equipment Departments Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["equipment"],
+        "summary": "Create Department",
+        "operationId": "create_department_equipment_departments_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/DepartmentCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DepartmentResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment/documents/{doc_id}": {
+      "delete": {
+        "tags": ["equipment"],
+        "summary": "Delete Equipment Document",
+        "operationId": "delete_equipment_document_equipment_documents__doc_id__delete",
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "Doc Id" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Successful Response" },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment/departments/{department_id}": {
+      "get": {
+        "tags": ["equipment"],
+        "summary": "Get Department",
+        "operationId": "get_department_equipment_departments__department_id__get",
+        "parameters": [
+          {
+            "name": "department_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Department Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DepartmentResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["equipment"],
+        "summary": "Update Department",
+        "operationId": "update_department_equipment_departments__department_id__patch",
+        "parameters": [
+          {
+            "name": "department_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Department Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/DepartmentUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DepartmentResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment/departments/{department_id}/deactivate": {
+      "patch": {
+        "tags": ["equipment"],
+        "summary": "Deactivate Department",
+        "operationId": "deactivate_department_equipment_departments__department_id__deactivate_patch",
+        "parameters": [
+          {
+            "name": "department_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Department Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DepartmentResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment": {
+      "get": {
+        "tags": ["equipment"],
+        "summary": "List Equipment",
+        "operationId": "list_equipment_equipment_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/EquipmentResponse" },
+                  "type": "array",
+                  "title": "Response List Equipment Equipment Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["equipment"],
+        "summary": "Register Equipment",
+        "operationId": "register_equipment_equipment_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/EquipmentCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EquipmentResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment/pending": {
+      "get": {
+        "tags": ["equipment"],
+        "summary": "List Pending Equipment",
+        "operationId": "list_pending_equipment_equipment_pending_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/EquipmentResponse" },
+                  "type": "array",
+                  "title": "Response List Pending Equipment Equipment Pending Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment/out-of-service": {
+      "get": {
+        "tags": ["equipment"],
+        "summary": "List Out Of Service Equipment",
+        "operationId": "list_out_of_service_equipment_equipment_out_of_service_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/EquipmentResponse" },
+                  "type": "array",
+                  "title": "Response List Out Of Service Equipment Equipment Out Of Service Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment/mine": {
+      "get": {
+        "tags": ["equipment"],
+        "summary": "List My Equipment",
+        "operationId": "list_my_equipment_equipment_mine_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/EquipmentResponse" },
+                  "type": "array",
+                  "title": "Response List My Equipment Equipment Mine Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment/{equipment_id}/resubmit": {
+      "post": {
+        "tags": ["equipment"],
+        "summary": "Resubmit Returned Equipment",
+        "operationId": "resubmit_returned_equipment_equipment__equipment_id__resubmit_post",
+        "parameters": [
+          {
+            "name": "equipment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Equipment Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/EquipmentUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EquipmentResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment/{equipment_id}": {
+      "get": {
+        "tags": ["equipment"],
+        "summary": "Get Equipment",
+        "operationId": "get_equipment_equipment__equipment_id__get",
+        "parameters": [
+          {
+            "name": "equipment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Equipment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EquipmentResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["equipment"],
+        "summary": "Update Equipment",
+        "operationId": "update_equipment_equipment__equipment_id__patch",
+        "parameters": [
+          {
+            "name": "equipment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Equipment Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/EquipmentUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EquipmentResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment/{equipment_id}/approve": {
+      "post": {
+        "tags": ["equipment"],
+        "summary": "Approve Equipment",
+        "operationId": "approve_equipment_equipment__equipment_id__approve_post",
+        "parameters": [
+          {
+            "name": "equipment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Equipment Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EquipmentResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment/{equipment_id}/return": {
+      "post": {
+        "tags": ["equipment"],
+        "summary": "Return Equipment",
+        "operationId": "return_equipment_equipment__equipment_id__return_post",
+        "parameters": [
+          {
+            "name": "equipment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Equipment Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EquipmentApprovalDecision"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EquipmentResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment/{equipment_id}/documents": {
+      "post": {
+        "tags": ["equipment"],
+        "summary": "Upload Equipment Document",
+        "operationId": "upload_equipment_document_equipment__equipment_id__documents_post",
+        "parameters": [
+          {
+            "name": "equipment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Equipment Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_equipment_document_equipment__equipment_id__documents_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DocumentResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment/documents/{doc_id}/download": {
+      "get": {
+        "tags": ["equipment"],
+        "summary": "Download Equipment Document",
+        "operationId": "download_equipment_document_equipment_documents__doc_id__download_get",
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "Doc Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/equipment/import-csv": {
+      "post": {
+        "tags": ["equipment"],
+        "summary": "Import Equipment Csv",
+        "operationId": "import_equipment_csv_equipment_import_csv_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_import_equipment_csv_equipment_import_csv_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faults/priority-list": {
+      "get": {
+        "tags": ["Priority List"],
+        "summary": "Get Priority List",
+        "operationId": "get_priority_list_faults_priority_list_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/PriorityListItem" },
+                  "type": "array",
+                  "title": "Response Get Priority List Faults Priority List Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faults/{fault_id}/assessments": {
+      "post": {
+        "tags": ["Fault Assessments"],
+        "summary": "Create Assessment",
+        "operationId": "create_assessment_faults__fault_id__assessments_post",
+        "parameters": [
+          {
+            "name": "fault_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fault Id"
+            }
+          },
+          {
+            "name": "X-Engineer-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "X-Engineer-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FaultAssessmentCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/FaultAssessmentRead" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Fault Assessments"],
+        "summary": "Get Assessments",
+        "operationId": "get_assessments_faults__fault_id__assessments_get",
+        "parameters": [
+          {
+            "name": "fault_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fault Id"
+            }
+          },
+          {
+            "name": "X-Engineer-Id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "X-Engineer-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FaultAssessmentRead"
+                  },
+                  "title": "Response Get Assessments Faults  Fault Id  Assessments Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repair-verification-records/": {
+      "post": {
+        "tags": ["Repair Verification Records"],
+        "summary": "Create Record",
+        "operationId": "create_record_repair_verification_records__post",
+        "parameters": [
+          {
+            "name": "user-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "User-Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RepairVerificationRecordCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RepairVerificationRecordResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Repair Verification Records"],
+        "summary": "List Records",
+        "operationId": "list_records_repair_verification_records__get",
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 0, "title": "Skip" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 100, "title": "Limit" }
+          },
+          {
+            "name": "user-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "User-Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RepairVerificationRecordResponse"
+                  },
+                  "title": "Response List Records Repair Verification Records  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repair-verification-records/{record_id}": {
+      "get": {
+        "tags": ["Repair Verification Records"],
+        "summary": "Get Record",
+        "operationId": "get_record_repair_verification_records__record_id__get",
+        "parameters": [
+          {
+            "name": "record_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Record Id"
+            }
+          },
+          {
+            "name": "user-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "User-Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RepairVerificationRecordResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Repair Verification Records"],
+        "summary": "Update Record",
+        "operationId": "update_record_repair_verification_records__record_id__put",
+        "parameters": [
+          {
+            "name": "record_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Record Id"
+            }
+          },
+          {
+            "name": "user-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "User-Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RepairVerificationRecordUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RepairVerificationRecordResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Repair Verification Records"],
+        "summary": "Delete Record",
+        "operationId": "delete_record_repair_verification_records__record_id__delete",
+        "parameters": [
+          {
+            "name": "record_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Record Id"
+            }
+          },
+          {
+            "name": "user-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "User-Id" }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Successful Response" },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/maintenance-summary": {
+      "get": {
+        "tags": ["Maintenance Reports"],
+        "summary": "Get Maintenance Summary",
+        "operationId": "get_maintenance_summary_reports_maintenance_summary_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaintenanceReportSummary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/maintenance-summary/pdf": {
+      "get": {
+        "tags": ["Maintenance Reports"],
+        "summary": "Download Maintenance Summary Pdf",
+        "operationId": "download_maintenance_summary_pdf_reports_maintenance_summary_pdf_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/faults/{fault_id}/repairs": {
+      "post": {
+        "tags": ["Repairs"],
+        "summary": "Add Repair",
+        "operationId": "add_repair_faults__fault_id__repairs_post",
+        "parameters": [
+          {
+            "name": "fault_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fault Id"
+            }
+          },
+          {
+            "name": "user-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "User-Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RepairCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RepairRecordResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faults/{fault_id}/tests": {
+      "post": {
+        "tags": ["Repairs"],
+        "summary": "Add Test",
+        "operationId": "add_test_faults__fault_id__tests_post",
+        "parameters": [
+          {
+            "name": "fault_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fault Id"
+            }
+          },
+          {
+            "name": "user-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "User-Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TestCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RepairRecordResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faults/{fault_id}/release": {
+      "post": {
+        "tags": ["Repairs"],
+        "summary": "Release Fault",
+        "operationId": "release_fault_faults__fault_id__release_post",
+        "parameters": [
+          {
+            "name": "fault_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fault Id"
+            }
+          },
+          {
+            "name": "user-id",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "User-Id" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  { "$ref": "#/components/schemas/ReleaseCreate" },
+                  { "type": "null" }
+                ],
+                "title": "Payload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RepairRecordResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faults/{fault_id}/records": {
+      "get": {
+        "tags": ["Repairs"],
+        "summary": "Get Records",
+        "operationId": "get_records_faults__fault_id__records_get",
+        "parameters": [
+          {
+            "name": "fault_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fault Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RepairRecordResponse"
+                  },
+                  "title": "Response Get Records Faults  Fault Id  Records Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faults/": {
+      "post": {
+        "tags": ["faults"],
+        "summary": "Create Fault",
+        "operationId": "create_fault_faults__post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FaultCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/FaultOut" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["faults"],
+        "summary": "List Faults",
+        "operationId": "list_faults_faults__get",
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 0, "title": "Skip" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 100, "title": "Limit" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/FaultOut" },
+                  "title": "Response List Faults Faults  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faults/{fault_id}": {
+      "get": {
+        "tags": ["faults"],
+        "summary": "Get Fault",
+        "operationId": "get_fault_faults__fault_id__get",
+        "parameters": [
+          {
+            "name": "fault_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fault Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/FaultOut" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faults/{fault_id}/assign": {
+      "post": {
+        "tags": ["faults"],
+        "summary": "Assign Fault",
+        "operationId": "assign_fault_faults__fault_id__assign_post",
+        "parameters": [
+          {
+            "name": "fault_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fault Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FaultAssign" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/FaultOut" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faults/{fault_id}/status": {
+      "post": {
+        "tags": ["faults"],
+        "summary": "Update Status",
+        "operationId": "update_status_faults__fault_id__status_post",
+        "parameters": [
+          {
+            "name": "fault_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fault Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FaultStatusUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/FaultOut" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/faults/{fault_id}/close": {
+      "post": {
+        "tags": ["faults"],
+        "summary": "Close Fault",
+        "operationId": "close_fault_faults__fault_id__close_post",
+        "parameters": [
+          {
+            "name": "fault_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fault Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FaultClose" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/FaultOut" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/": {
+      "get": {
+        "tags": ["notifications"],
+        "summary": "List Mine",
+        "operationId": "list_mine_notifications__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/NotificationRead" },
+                  "type": "array",
+                  "title": "Response List Mine Notifications  Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["notifications"],
+        "summary": "Create",
+        "operationId": "create_notifications__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/NotificationCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/NotificationRead" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/me": {
+      "get": {
+        "tags": ["notifications"],
+        "summary": "List Mine",
+        "operationId": "list_mine_notifications_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/NotificationRead" },
+                  "type": "array",
+                  "title": "Response List Mine Notifications Me Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/{id}": {
+      "get": {
+        "tags": ["notifications"],
+        "summary": "Get One",
+        "operationId": "get_one_notifications__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/NotificationRead" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/{id}/read": {
+      "post": {
+        "tags": ["notifications"],
+        "summary": "Mark Read",
+        "operationId": "mark_read_notifications__id__read_post",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/NotificationRead" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/requests": {
+      "post": {
+        "tags": ["Resource Requests"],
+        "summary": "Create Request",
+        "operationId": "create_request_requests_post",
+        "parameters": [
+          {
+            "name": "user-id",
+            "in": "header",
+            "required": false,
+            "schema": { "type": "string", "format": "uuid", "title": "User-Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResourceRequestsCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Resource Requests"],
+        "summary": "List Requests",
+        "operationId": "list_requests_requests_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/requests/overdue": {
+      "get": {
+        "tags": ["Resource Requests"],
+        "summary": "List Overdue",
+        "operationId": "list_overdue_requests_overdue_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/requests/{request_id}": {
+      "get": {
+        "tags": ["Resource Requests"],
+        "summary": "Get Request",
+        "operationId": "get_request_requests__request_id__get",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Resource Requests"],
+        "summary": "Update Request",
+        "operationId": "update_request_requests__request_id__patch",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResourceRequestsUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/requests/{request_id}/decide": {
+      "post": {
+        "tags": ["Resource Requests"],
+        "summary": "Decide Request",
+        "operationId": "decide_request_requests__request_id__decide_post",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": false,
+            "schema": { "type": "string", "title": "X-User-Role" }
+          },
+          {
+            "name": "user-id",
+            "in": "header",
+            "required": false,
+            "schema": { "type": "string", "format": "uuid", "title": "User-Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResourceRequestsDecide"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/requests/{request_id}/items": {
+      "get": {
+        "tags": ["Request Items"],
+        "summary": "Get Items",
+        "operationId": "get_items_requests__request_id__items_get",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RequestItemsResponse"
+                  },
+                  "title": "Response Get Items Requests  Request Id  Items Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/requests/{request_id}/items/{item_id}": {
+      "patch": {
+        "tags": ["Request Items"],
+        "summary": "Update Item",
+        "operationId": "update_item_requests__request_id__items__item_id__patch",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          },
+          {
+            "name": "item_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid", "title": "Item Id" }
+          },
+          {
+            "name": "quantity_fulfilled",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "title": "Quantity Fulfilled" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestItemsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/requests/{request_id}/follow-ups": {
+      "post": {
+        "tags": ["Request Follow Ups"],
+        "summary": "Log Follow Up",
+        "operationId": "log_follow_up_requests__request_id__follow_ups_post",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          },
+          {
+            "name": "x-user-role",
+            "in": "header",
+            "required": false,
+            "schema": { "type": "string", "title": "X-User-Role" }
+          },
+          {
+            "name": "user-id",
+            "in": "header",
+            "required": false,
+            "schema": { "type": "string", "format": "uuid", "title": "User-Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestFollowUpsCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestFollowUpsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Request Follow Ups"],
+        "summary": "Get Follow Ups",
+        "operationId": "get_follow_ups_requests__request_id__follow_ups_get",
+        "parameters": [
+          {
+            "name": "request_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Request Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RequestFollowUpsResponse"
+                  },
+                  "title": "Response Get Follow Ups Requests  Request Id  Follow Ups Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/follow-ups/{follow_up_id}/reply": {
+      "post": {
+        "tags": ["Request Follow Ups"],
+        "summary": "Log Reply",
+        "operationId": "log_reply_follow_ups__follow_up_id__reply_post",
+        "parameters": [
+          {
+            "name": "follow_up_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Follow Up Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RequestFollowUpsReply" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestFollowUpsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/follow-ups/{follow_up_id}": {
+      "patch": {
+        "tags": ["Request Follow Ups"],
+        "summary": "Update Follow Up",
+        "operationId": "update_follow_up_follow_ups__follow_up_id__patch",
+        "parameters": [
+          {
+            "name": "follow_up_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Follow Up Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestFollowUpsUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestFollowUpsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": { "type": "string" },
+                  "type": "object",
+                  "title": "Response Health Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AcceptInviteRequest": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 20,
+            "title": "Token"
+          },
+          "full_name": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Full Name"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Password"
+          },
+          "confirm_password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Confirm Password"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["token", "full_name", "password", "confirm_password"],
+        "title": "AcceptInviteRequest"
+      },
+      "Body_import_equipment_csv_equipment_import_csv_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": ["file"],
+        "title": "Body_import_equipment_csv_equipment_import_csv_post"
+      },
+      "Body_upload_equipment_document_equipment__equipment_id__documents_post": {
+        "properties": {
+          "doc_type": { "type": "string", "title": "Doc Type" },
+          "doc_name": { "type": "string", "title": "Doc Name" },
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": ["doc_type", "doc_name", "file"],
+        "title": "Body_upload_equipment_document_equipment__equipment_id__documents_post"
+      },
+      "CurrentUser": {
+        "properties": {
+          "user_id": { "type": "string", "format": "uuid", "title": "User Id" },
+          "full_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Full Name"
+          },
+          "email": { "type": "string", "title": "Email" },
+          "role": { "$ref": "#/components/schemas/UserRole" },
+          "department_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Department Id"
+          },
+          "next_step": {
+            "type": "string",
+            "title": "Next Step",
+            "default": "done"
+          }
+        },
+        "type": "object",
+        "required": ["user_id", "full_name", "email", "role", "department_id"],
+        "title": "CurrentUser",
+        "description": "What the apps may know about the signed-in user. Never the password hash or tokens."
+      },
+      "DashboardSummary": {
+        "properties": {
+          "active_faults": { "type": "integer", "title": "Active Faults" },
+          "critical_faults": { "type": "integer", "title": "Critical Faults" },
+          "high_priority_faults": {
+            "type": "integer",
+            "title": "High Priority Faults"
+          },
+          "equipment_down": { "type": "integer", "title": "Equipment Down" },
+          "equipment_under_maintenance": {
+            "type": "integer",
+            "title": "Equipment Under Maintenance"
+          }
+        },
+        "type": "object",
+        "required": [
+          "active_faults",
+          "critical_faults",
+          "high_priority_faults",
+          "equipment_down",
+          "equipment_under_maintenance"
+        ],
+        "title": "DashboardSummary"
+      },
+      "DepartmentCreate": {
+        "properties": {
+          "department_name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Department Name"
+          },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "responsible_engineer_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Responsible Engineer Id"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": ["department_name"],
+        "title": "DepartmentCreate"
+      },
+      "DepartmentResponse": {
+        "properties": {
+          "department_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Department Id"
+          },
+          "department_name": { "type": "string", "title": "Department Name" },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "responsible_engineer_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Responsible Engineer Id"
+          },
+          "responsible_engineer_role": {
+            "type": "string",
+            "title": "Responsible Engineer Role"
+          },
+          "is_active": { "type": "boolean", "title": "Is Active" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "department_id",
+          "department_name",
+          "description",
+          "responsible_engineer_role",
+          "is_active",
+          "created_at"
+        ],
+        "title": "DepartmentResponse"
+      },
+      "DepartmentUpdate": {
+        "properties": {
+          "department_name": {
+            "anyOf": [
+              { "type": "string", "maxLength": 100, "minLength": 1 },
+              { "type": "null" }
+            ],
+            "title": "Department Name"
+          },
+          "description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Description"
+          },
+          "responsible_engineer_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Responsible Engineer Id"
+          },
+          "is_active": {
+            "anyOf": [{ "type": "boolean" }, { "type": "null" }],
+            "title": "Is Active"
+          }
+        },
+        "type": "object",
+        "title": "DepartmentUpdate"
+      },
+      "DocumentResponse": {
+        "properties": {
+          "document_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Document Id"
+          },
+          "equipment_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Equipment Id"
+          },
+          "document_type": {
+            "type": "string",
+            "enum": [
+              "manual",
+              "warranty",
+              "donation_letter",
+              "delivery_note",
+              "installation_report",
+              "calibration_certificate",
+              "photo",
+              "other"
+            ],
+            "title": "Document Type"
+          },
+          "document_name": { "type": "string", "title": "Document Name" },
+          "storage_key": { "type": "string", "title": "Storage Key" },
+          "uploaded_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Uploaded By"
+          },
+          "uploaded_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Uploaded At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "document_id",
+          "equipment_id",
+          "document_type",
+          "document_name",
+          "storage_key",
+          "uploaded_by",
+          "uploaded_at"
+        ],
+        "title": "DocumentResponse"
+      },
+      "DowntimeSummary": {
+        "properties": {
+          "equipment_still_down": {
+            "type": "integer",
+            "title": "Equipment Still Down"
+          },
+          "total_downtime": {
+            "type": "string",
+            "format": "duration",
+            "title": "Total Downtime"
+          },
+          "average_downtime": {
+            "type": "string",
+            "format": "duration",
+            "title": "Average Downtime"
+          }
+        },
+        "type": "object",
+        "required": [
+          "equipment_still_down",
+          "total_downtime",
+          "average_downtime"
+        ],
+        "title": "DowntimeSummary"
+      },
+      "EquipmentApprovalDecision": {
+        "properties": {
+          "reason": {
+            "anyOf": [
+              { "type": "string", "maxLength": 1000 },
+              { "type": "null" }
+            ],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "title": "EquipmentApprovalDecision"
+      },
+      "EquipmentCreate": {
+        "properties": {
+          "manufacturer": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Manufacturer"
+          },
+          "model_name": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Model Name"
+          },
+          "model_number": {
+            "anyOf": [
+              { "type": "string", "maxLength": 80 },
+              { "type": "null" }
+            ],
+            "title": "Model Number"
+          },
+          "equipment_category": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Equipment Category"
+          },
+          "department_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Department Id"
+          },
+          "asset_tag": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Asset Tag"
+          },
+          "serial_number": {
+            "anyOf": [
+              { "type": "string", "maxLength": 120 },
+              { "type": "null" }
+            ],
+            "title": "Serial Number"
+          },
+          "location": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Location"
+          },
+          "acquisition_type": {
+            "type": "string",
+            "enum": ["donated", "purchased", "transferred", "unknown", "other"],
+            "title": "Acquisition Type",
+            "default": "unknown"
+          },
+          "donor_or_supplier": {
+            "anyOf": [
+              { "type": "string", "maxLength": 180 },
+              { "type": "null" }
+            ],
+            "title": "Donor Or Supplier"
+          },
+          "received_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Received At"
+          },
+          "installation_status": {
+            "type": "string",
+            "enum": [
+              "unknown",
+              "not_installed",
+              "partially_installed",
+              "installed",
+              "commissioned"
+            ],
+            "title": "Installation Status",
+            "default": "unknown"
+          },
+          "service_status": {
+            "type": "string",
+            "enum": [
+              "not_assessed",
+              "in_service",
+              "out_of_service",
+              "under_maintenance",
+              "not_installed",
+              "incomplete",
+              "retired"
+            ],
+            "title": "Service Status",
+            "default": "not_assessed"
+          },
+          "warranty_start_date": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Warranty Start Date"
+          },
+          "warranty_end_date": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Warranty End Date"
+          }
+        },
+        "type": "object",
+        "required": [
+          "manufacturer",
+          "model_name",
+          "equipment_category",
+          "department_id",
+          "asset_tag",
+          "location"
+        ],
+        "title": "EquipmentCreate"
+      },
+      "EquipmentResponse": {
+        "properties": {
+          "equipment_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Equipment Id"
+          },
+          "manufacturer": { "type": "string", "title": "Manufacturer" },
+          "model_name": { "type": "string", "title": "Model Name" },
+          "model_number": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Model Number"
+          },
+          "equipment_category": {
+            "type": "string",
+            "title": "Equipment Category"
+          },
+          "department_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Department Id"
+          },
+          "asset_tag": { "type": "string", "title": "Asset Tag" },
+          "serial_number": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Serial Number"
+          },
+          "location": { "type": "string", "title": "Location" },
+          "acquisition_type": {
+            "type": "string",
+            "enum": ["donated", "purchased", "transferred", "unknown", "other"],
+            "title": "Acquisition Type"
+          },
+          "registration_status": {
+            "type": "string",
+            "title": "Registration Status"
+          },
+          "installation_status": {
+            "type": "string",
+            "enum": [
+              "unknown",
+              "not_installed",
+              "partially_installed",
+              "installed",
+              "commissioned"
+            ],
+            "title": "Installation Status"
+          },
+          "service_status": {
+            "type": "string",
+            "enum": [
+              "not_assessed",
+              "in_service",
+              "out_of_service",
+              "under_maintenance",
+              "not_installed",
+              "incomplete",
+              "retired"
+            ],
+            "title": "Service Status"
+          },
+          "registered_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Registered By"
+          },
+          "approved_by": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Approved By"
+          },
+          "approved_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Approved At"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "equipment_id",
+          "manufacturer",
+          "model_name",
+          "model_number",
+          "equipment_category",
+          "department_id",
+          "asset_tag",
+          "serial_number",
+          "location",
+          "acquisition_type",
+          "registration_status",
+          "installation_status",
+          "service_status",
+          "registered_by",
+          "created_at"
+        ],
+        "title": "EquipmentResponse"
+      },
+      "EquipmentUpdate": {
+        "properties": {
+          "manufacturer": {
+            "anyOf": [
+              { "type": "string", "maxLength": 120, "minLength": 1 },
+              { "type": "null" }
+            ],
+            "title": "Manufacturer"
+          },
+          "model_name": {
+            "anyOf": [
+              { "type": "string", "maxLength": 120, "minLength": 1 },
+              { "type": "null" }
+            ],
+            "title": "Model Name"
+          },
+          "model_number": {
+            "anyOf": [
+              { "type": "string", "maxLength": 80 },
+              { "type": "null" }
+            ],
+            "title": "Model Number"
+          },
+          "equipment_category": {
+            "anyOf": [
+              { "type": "string", "maxLength": 100, "minLength": 1 },
+              { "type": "null" }
+            ],
+            "title": "Equipment Category"
+          },
+          "department_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Department Id"
+          },
+          "asset_tag": {
+            "anyOf": [
+              { "type": "string", "maxLength": 80, "minLength": 1 },
+              { "type": "null" }
+            ],
+            "title": "Asset Tag"
+          },
+          "serial_number": {
+            "anyOf": [
+              { "type": "string", "maxLength": 120 },
+              { "type": "null" }
+            ],
+            "title": "Serial Number"
+          },
+          "location": {
+            "anyOf": [
+              { "type": "string", "maxLength": 160, "minLength": 1 },
+              { "type": "null" }
+            ],
+            "title": "Location"
+          },
+          "acquisition_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "donated",
+                  "purchased",
+                  "transferred",
+                  "unknown",
+                  "other"
+                ]
+              },
+              { "type": "null" }
+            ],
+            "title": "Acquisition Type"
+          },
+          "donor_or_supplier": {
+            "anyOf": [
+              { "type": "string", "maxLength": 180 },
+              { "type": "null" }
+            ],
+            "title": "Donor Or Supplier"
+          },
+          "received_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Received At"
+          },
+          "installation_status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "unknown",
+                  "not_installed",
+                  "partially_installed",
+                  "installed",
+                  "commissioned"
+                ]
+              },
+              { "type": "null" }
+            ],
+            "title": "Installation Status"
+          },
+          "service_status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "not_assessed",
+                  "in_service",
+                  "out_of_service",
+                  "under_maintenance",
+                  "not_installed",
+                  "incomplete",
+                  "retired"
+                ]
+              },
+              { "type": "null" }
+            ],
+            "title": "Service Status"
+          },
+          "warranty_start_date": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Warranty Start Date"
+          },
+          "warranty_end_date": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Warranty End Date"
+          }
+        },
+        "type": "object",
+        "title": "EquipmentUpdate"
+      },
+      "FaultAssessmentCreate": {
+        "properties": {
+          "findings": { "type": "string", "minLength": 1, "title": "Findings" },
+          "condition": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Condition"
+          },
+          "recommended_action": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Recommended Action"
+          },
+          "severity_factor": {
+            "type": "integer",
+            "maximum": 4.0,
+            "minimum": 1.0,
+            "title": "Severity Factor"
+          },
+          "clinical_criticality": {
+            "type": "integer",
+            "maximum": 3.0,
+            "minimum": 1.0,
+            "title": "Clinical Criticality"
+          },
+          "backup_available": {
+            "type": "boolean",
+            "title": "Backup Available"
+          },
+          "priority_level": { "$ref": "#/components/schemas/PriorityLevel" },
+          "priority_explanation": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Priority Explanation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "findings",
+          "condition",
+          "recommended_action",
+          "severity_factor",
+          "clinical_criticality",
+          "backup_available",
+          "priority_level",
+          "priority_explanation"
+        ],
+        "title": "FaultAssessmentCreate"
+      },
+      "FaultAssessmentRead": {
+        "properties": {
+          "assessment_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Assessment Id"
+          },
+          "fault_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Fault Id"
+          },
+          "assessed_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Assessed By"
+          },
+          "assessed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Assessed At"
+          },
+          "findings": { "type": "string", "title": "Findings" },
+          "condition": { "type": "string", "title": "Condition" },
+          "recommended_action": {
+            "type": "string",
+            "title": "Recommended Action"
+          },
+          "severity_factor": { "type": "integer", "title": "Severity Factor" },
+          "clinical_criticality": {
+            "type": "integer",
+            "title": "Clinical Criticality"
+          },
+          "backup_available": {
+            "type": "boolean",
+            "title": "Backup Available"
+          },
+          "history_factor": { "type": "integer", "title": "History Factor" },
+          "priority_score": { "type": "integer", "title": "Priority Score" },
+          "rule_priority_level": {
+            "$ref": "#/components/schemas/PriorityLevel"
+          },
+          "priority_level": { "$ref": "#/components/schemas/PriorityLevel" },
+          "priority_explanation": {
+            "type": "string",
+            "title": "Priority Explanation"
+          },
+          "rule_version": { "type": "string", "title": "Rule Version" },
+          "is_current": { "type": "boolean", "title": "Is Current" }
+        },
+        "type": "object",
+        "required": [
+          "assessment_id",
+          "fault_id",
+          "assessed_by",
+          "assessed_at",
+          "findings",
+          "condition",
+          "recommended_action",
+          "severity_factor",
+          "clinical_criticality",
+          "backup_available",
+          "history_factor",
+          "priority_score",
+          "rule_priority_level",
+          "priority_level",
+          "priority_explanation",
+          "rule_version",
+          "is_current"
+        ],
+        "title": "FaultAssessmentRead"
+      },
+      "FaultAssign": {
+        "properties": {
+          "assigned_engineer_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Assigned Engineer Id"
+          },
+          "assigned_engineer_role": {
+            "type": "string",
+            "title": "Assigned Engineer Role",
+            "default": "biomedical_engineer"
+          }
+        },
+        "type": "object",
+        "required": ["assigned_engineer_id"],
+        "title": "FaultAssign"
+      },
+      "FaultClose": {
+        "properties": {
+          "reason": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Reason"
+          },
+          "changed_by": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Changed By"
+          },
+          "closed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Closed At"
+          }
+        },
+        "type": "object",
+        "title": "FaultClose"
+      },
+      "FaultCreate": {
+        "properties": {
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Description"
+          },
+          "severity": { "$ref": "#/components/schemas/FaultSeverity" },
+          "failure_observed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Failure Observed At"
+          },
+          "client_report_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Client Report Id"
+          },
+          "equipment_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Equipment Id"
+          },
+          "reported_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Reported By"
+          }
+        },
+        "type": "object",
+        "required": ["description", "severity", "equipment_id", "reported_by"],
+        "title": "FaultCreate"
+      },
+      "FaultOut": {
+        "properties": {
+          "fault_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Fault Id"
+          },
+          "equipment_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Equipment Id"
+          },
+          "reported_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Reported By"
+          },
+          "client_report_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Client Report Id"
+          },
+          "assigned_engineer_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Assigned Engineer Id"
+          },
+          "assigned_engineer_role": {
+            "type": "string",
+            "title": "Assigned Engineer Role"
+          },
+          "description": { "type": "string", "title": "Description" },
+          "severity": { "type": "string", "title": "Severity" },
+          "status": { "type": "string", "title": "Status" },
+          "failure_observed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Failure Observed At"
+          },
+          "reported_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Reported At"
+          },
+          "out_of_service_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Out Of Service At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "closed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Closed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fault_id",
+          "equipment_id",
+          "reported_by",
+          "assigned_engineer_role",
+          "description",
+          "severity",
+          "status",
+          "reported_at",
+          "updated_at"
+        ],
+        "title": "FaultOut"
+      },
+      "FaultSeverity": {
+        "type": "string",
+        "enum": ["low", "medium", "high", "critical"],
+        "title": "FaultSeverity"
+      },
+      "FaultStatus": {
+        "type": "string",
+        "enum": [
+          "reported",
+          "assigned",
+          "under_inspection",
+          "awaiting_resources",
+          "under_repair",
+          "awaiting_verification",
+          "verified",
+          "closed",
+          "cancelled"
+        ],
+        "title": "FaultStatus"
+      },
+      "FaultStatusUpdate": {
+        "properties": {
+          "status": { "$ref": "#/components/schemas/FaultStatus" },
+          "reason": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Reason"
+          },
+          "changed_by": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Changed By"
+          },
+          "out_of_service_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Out Of Service At"
+          },
+          "closed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Closed At"
+          }
+        },
+        "type": "object",
+        "required": ["status"],
+        "title": "FaultStatusUpdate"
+      },
+      "FaultSummary": {
+        "properties": {
+          "total_faults": { "type": "integer", "title": "Total Faults" },
+          "open_faults": { "type": "integer", "title": "Open Faults" },
+          "closed_faults": { "type": "integer", "title": "Closed Faults" }
+        },
+        "type": "object",
+        "required": ["total_faults", "open_faults", "closed_faults"],
+        "title": "FaultSummary"
+      },
+      "ForgotPasswordRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 3,
+            "title": "Email"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["email"],
+        "title": "ForgotPasswordRequest"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": { "$ref": "#/components/schemas/ValidationError" },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "InviteUserRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 3,
+            "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+            "title": "Email"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["clinical_staff", "biomedical_engineer"],
+            "title": "Role"
+          },
+          "department_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Department Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["email", "role", "department_id"],
+        "title": "InviteUserRequest"
+      },
+      "LoginRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 3,
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Password"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["email", "password"],
+        "title": "LoginRequest"
+      },
+      "MaintenanceReportSummary": {
+        "properties": {
+          "faults": { "$ref": "#/components/schemas/FaultSummary" },
+          "priorities": { "$ref": "#/components/schemas/PriorityBreakdown" },
+          "downtime": { "$ref": "#/components/schemas/DowntimeSummary" },
+          "repairs": { "$ref": "#/components/schemas/RepairSummary" },
+          "resource_requests": {
+            "$ref": "#/components/schemas/ResourceRequestSummary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "faults",
+          "priorities",
+          "downtime",
+          "repairs",
+          "resource_requests"
+        ],
+        "title": "MaintenanceReportSummary"
+      },
+      "MfaCodeRequest": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 6,
+            "title": "Code"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["code"],
+        "title": "MfaCodeRequest"
+      },
+      "NotificationCreate": {
+        "properties": {
+          "recipient_user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Recipient User Id"
+          },
+          "notification_type": {
+            "type": "string",
+            "title": "Notification Type"
+          },
+          "message": { "type": "string", "title": "Message" },
+          "related_equipment_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Related Equipment Id"
+          },
+          "related_fault_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Related Fault Id"
+          },
+          "related_request_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Related Request Id"
+          },
+          "channel": {
+            "type": "string",
+            "title": "Channel",
+            "default": "in_app"
+          }
+        },
+        "type": "object",
+        "required": ["recipient_user_id", "notification_type", "message"],
+        "title": "NotificationCreate"
+      },
+      "NotificationRead": {
+        "properties": {
+          "notification_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Notification Id"
+          },
+          "recipient_user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Recipient User Id"
+          },
+          "notification_type": {
+            "type": "string",
+            "title": "Notification Type"
+          },
+          "message": { "type": "string", "title": "Message" },
+          "channel": { "type": "string", "title": "Channel" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "delivered_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Delivered At"
+          },
+          "read_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Read At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "notification_id",
+          "recipient_user_id",
+          "notification_type",
+          "message",
+          "channel",
+          "created_at"
+        ],
+        "title": "NotificationRead"
+      },
+      "PriorityBreakdown": {
+        "properties": {
+          "critical": { "type": "integer", "title": "Critical" },
+          "high": { "type": "integer", "title": "High" },
+          "medium": { "type": "integer", "title": "Medium" },
+          "low": { "type": "integer", "title": "Low" }
+        },
+        "type": "object",
+        "required": ["critical", "high", "medium", "low"],
+        "title": "PriorityBreakdown"
+      },
+      "PriorityLevel": {
+        "type": "string",
+        "enum": ["low", "medium", "high", "critical"],
+        "title": "PriorityLevel"
+      },
+      "PriorityListItem": {
+        "properties": {
+          "fault_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Fault Id"
+          },
+          "equipment_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Equipment Id"
+          },
+          "equipment_name": { "type": "string", "title": "Equipment Name" },
+          "asset_tag": { "type": "string", "title": "Asset Tag" },
+          "department_name": { "type": "string", "title": "Department Name" },
+          "fault_status": { "type": "string", "title": "Fault Status" },
+          "priority_score": { "type": "integer", "title": "Priority Score" },
+          "priority_level": { "type": "string", "title": "Priority Level" },
+          "priority_explanation": {
+            "type": "string",
+            "title": "Priority Explanation"
+          },
+          "severity_factor": { "type": "integer", "title": "Severity Factor" },
+          "clinical_criticality": {
+            "type": "integer",
+            "title": "Clinical Criticality"
+          },
+          "backup_available": {
+            "type": "boolean",
+            "title": "Backup Available"
+          },
+          "reported_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Reported At"
+          },
+          "downtime": {
+            "anyOf": [
+              { "type": "string", "format": "duration" },
+              { "type": "null" }
+            ],
+            "title": "Downtime"
+          },
+          "still_down": {
+            "anyOf": [{ "type": "boolean" }, { "type": "null" }],
+            "title": "Still Down"
+          },
+          "assigned_engineer_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Assigned Engineer Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fault_id",
+          "equipment_id",
+          "equipment_name",
+          "asset_tag",
+          "department_name",
+          "fault_status",
+          "priority_score",
+          "priority_level",
+          "priority_explanation",
+          "severity_factor",
+          "clinical_criticality",
+          "backup_available",
+          "reported_at"
+        ],
+        "title": "PriorityListItem"
+      },
+      "ReleaseCreate": {
+        "properties": {
+          "test_details": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Test Details"
+          }
+        },
+        "type": "object",
+        "title": "ReleaseCreate"
+      },
+      "RepairCreate": {
+        "properties": {
+          "work_performed": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Work Performed"
+          },
+          "parts_used": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Parts Used"
+          },
+          "repair_started_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Repair Started At"
+          },
+          "repair_completed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Repair Completed At"
+          }
+        },
+        "type": "object",
+        "required": ["work_performed"],
+        "title": "RepairCreate"
+      },
+      "RepairRecordResponse": {
+        "properties": {
+          "record_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Record Id"
+          },
+          "fault_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Fault Id"
+          },
+          "equipment_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Equipment Id"
+          },
+          "record_type": { "type": "string", "title": "Record Type" },
+          "performed_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Performed By"
+          },
+          "performed_by_role": {
+            "type": "string",
+            "title": "Performed By Role"
+          },
+          "work_performed": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Work Performed"
+          },
+          "parts_used": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Parts Used"
+          },
+          "repair_started_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Repair Started At"
+          },
+          "repair_completed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Repair Completed At"
+          },
+          "test_result": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Test Result"
+          },
+          "test_details": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Test Details"
+          },
+          "authorized_for_service": {
+            "type": "boolean",
+            "title": "Authorized For Service"
+          },
+          "performed_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Performed At"
+          },
+          "released_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Released At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "record_id",
+          "fault_id",
+          "equipment_id",
+          "record_type",
+          "performed_by",
+          "performed_by_role",
+          "authorized_for_service",
+          "performed_at"
+        ],
+        "title": "RepairRecordResponse"
+      },
+      "RepairSummary": {
+        "properties": {
+          "repairs_completed": {
+            "type": "integer",
+            "title": "Repairs Completed"
+          },
+          "equipment_returned_to_service": {
+            "type": "integer",
+            "title": "Equipment Returned To Service"
+          }
+        },
+        "type": "object",
+        "required": ["repairs_completed", "equipment_returned_to_service"],
+        "title": "RepairSummary"
+      },
+      "RepairVerificationRecordCreate": {
+        "properties": {
+          "fault_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Fault Id"
+          },
+          "equipment_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Equipment Id"
+          },
+          "record_type": { "type": "string", "title": "Record Type" },
+          "performed_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Performed By"
+          },
+          "performed_by_role": {
+            "type": "string",
+            "title": "Performed By Role",
+            "default": "biomedical_engineer"
+          },
+          "work_performed": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Work Performed"
+          },
+          "parts_used": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Parts Used"
+          },
+          "repair_started_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Repair Started At"
+          },
+          "repair_completed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Repair Completed At"
+          },
+          "test_result": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Test Result"
+          },
+          "test_details": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Test Details"
+          },
+          "authorized_for_service": {
+            "type": "boolean",
+            "title": "Authorized For Service",
+            "default": false
+          },
+          "performed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Performed At"
+          },
+          "released_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Released At"
+          }
+        },
+        "type": "object",
+        "required": ["fault_id", "equipment_id", "record_type", "performed_by"],
+        "title": "RepairVerificationRecordCreate"
+      },
+      "RepairVerificationRecordResponse": {
+        "properties": {
+          "fault_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Fault Id"
+          },
+          "equipment_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Equipment Id"
+          },
+          "record_type": { "type": "string", "title": "Record Type" },
+          "performed_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Performed By"
+          },
+          "performed_by_role": {
+            "type": "string",
+            "title": "Performed By Role",
+            "default": "biomedical_engineer"
+          },
+          "work_performed": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Work Performed"
+          },
+          "parts_used": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Parts Used"
+          },
+          "repair_started_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Repair Started At"
+          },
+          "repair_completed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Repair Completed At"
+          },
+          "test_result": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Test Result"
+          },
+          "test_details": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Test Details"
+          },
+          "authorized_for_service": {
+            "type": "boolean",
+            "title": "Authorized For Service",
+            "default": false
+          },
+          "performed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Performed At"
+          },
+          "released_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Released At"
+          },
+          "record_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Record Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fault_id",
+          "equipment_id",
+          "record_type",
+          "performed_by",
+          "record_id"
+        ],
+        "title": "RepairVerificationRecordResponse"
+      },
+      "RepairVerificationRecordUpdate": {
+        "properties": {
+          "record_type": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Record Type"
+          },
+          "work_performed": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Work Performed"
+          },
+          "parts_used": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Parts Used"
+          },
+          "repair_started_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Repair Started At"
+          },
+          "repair_completed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Repair Completed At"
+          },
+          "test_result": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Test Result"
+          },
+          "test_details": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Test Details"
+          },
+          "authorized_for_service": {
+            "anyOf": [{ "type": "boolean" }, { "type": "null" }],
+            "title": "Authorized For Service"
+          },
+          "performed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Performed At"
+          },
+          "released_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Released At"
+          }
+        },
+        "type": "object",
+        "title": "RepairVerificationRecordUpdate"
+      },
+      "RequestFollowUpsCreate": {
+        "properties": {
+          "organisation": { "type": "string", "title": "Organisation" },
+          "channel": { "type": "string", "title": "Channel" },
+          "sent_date": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Sent Date"
+          },
+          "sent_at": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Sent At"
+          },
+          "next_follow_up_date": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Next Follow Up Date"
+          },
+          "note": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": ["organisation", "channel"],
+        "title": "RequestFollowUpsCreate"
+      },
+      "RequestFollowUpsReply": {
+        "properties": {
+          "reply_status": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Reply Status"
+          },
+          "reply_at": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Reply At"
+          },
+          "note": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "title": "RequestFollowUpsReply"
+      },
+      "RequestFollowUpsResponse": {
+        "properties": {
+          "follow_up_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Follow Up Id"
+          },
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "organisation": { "type": "string", "title": "Organisation" },
+          "channel": { "type": "string", "title": "Channel" },
+          "sent_at": { "type": "string", "format": "date", "title": "Sent At" },
+          "next_follow_up_date": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Next Follow Up Date"
+          },
+          "reply_status": { "type": "string", "title": "Reply Status" },
+          "reply_at": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Reply At"
+          },
+          "note": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Note"
+          },
+          "logged_by": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Logged By"
+          },
+          "logged_by_role": { "type": "string", "title": "Logged By Role" },
+          "logged_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Logged At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "follow_up_id",
+          "request_id",
+          "organisation",
+          "channel",
+          "sent_at",
+          "reply_status",
+          "logged_by",
+          "logged_by_role"
+        ],
+        "title": "RequestFollowUpsResponse"
+      },
+      "RequestFollowUpsUpdate": {
+        "properties": {
+          "organisation": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Organisation"
+          },
+          "channel": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Channel"
+          },
+          "sent_date": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Sent Date"
+          },
+          "sent_at": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Sent At"
+          },
+          "next_follow_up_date": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Next Follow Up Date"
+          },
+          "reply_status": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Reply Status"
+          },
+          "reply_at": {
+            "anyOf": [
+              { "type": "string", "format": "date" },
+              { "type": "null" }
+            ],
+            "title": "Reply At"
+          },
+          "note": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "title": "RequestFollowUpsUpdate"
+      },
+      "RequestItemsCreate": {
+        "properties": {
+          "item_name_or_service": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Item Name Or Service"
+          },
+          "item_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Item Name"
+          },
+          "technical_specifications": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Technical Specifications"
+          },
+          "quantity_requested": {
+            "type": "integer",
+            "title": "Quantity Requested"
+          }
+        },
+        "type": "object",
+        "required": ["quantity_requested"],
+        "title": "RequestItemsCreate"
+      },
+      "RequestItemsResponse": {
+        "properties": {
+          "item_id": { "type": "string", "format": "uuid", "title": "Item Id" },
+          "request_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Request Id"
+          },
+          "item_name_or_service": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Item Name Or Service"
+          },
+          "technical_specifications": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Technical Specifications"
+          },
+          "quantity_requested": {
+            "type": "integer",
+            "title": "Quantity Requested"
+          },
+          "quantity_approved": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Quantity Approved"
+          },
+          "quantity_fulfilled": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Quantity Fulfilled",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": ["item_id", "request_id", "quantity_requested"],
+        "title": "RequestItemsResponse"
+      },
+      "ResetPasswordRequest": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 20,
+            "title": "Token"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Password"
+          },
+          "confirm_password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Confirm Password"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": ["token", "password", "confirm_password"],
+        "title": "ResetPasswordRequest"
+      },
+      "ResourceRequestSummary": {
+        "properties": {
+          "pending_requests": {
+            "type": "integer",
+            "title": "Pending Requests"
+          },
+          "resolved_requests": {
+            "type": "integer",
+            "title": "Resolved Requests"
+          }
+        },
+        "type": "object",
+        "required": ["pending_requests", "resolved_requests"],
+        "title": "ResourceRequestSummary"
+      },
+      "ResourceRequestsCreate": {
+        "properties": {
+          "request_type": { "type": "string", "title": "Request Type" },
+          "justification": { "type": "string", "title": "Justification" },
+          "related_fault_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Related Fault Id"
+          },
+          "items": {
+            "items": { "$ref": "#/components/schemas/RequestItemsCreate" },
+            "type": "array",
+            "title": "Items",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["request_type", "justification"],
+        "title": "ResourceRequestsCreate"
+      },
+      "ResourceRequestsDecide": {
+        "properties": {
+          "approval_status": { "type": "string", "title": "Approval Status" },
+          "manager_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Manager Id"
+          },
+          "decision_reason": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Decision Reason"
+          }
+        },
+        "type": "object",
+        "required": ["approval_status"],
+        "title": "ResourceRequestsDecide"
+      },
+      "ResourceRequestsUpdate": {
+        "properties": {
+          "request_type": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Request Type"
+          },
+          "justification": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Justification"
+          },
+          "related_fault_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Related Fault Id"
+          },
+          "items": {
+            "anyOf": [
+              {
+                "items": { "$ref": "#/components/schemas/RequestItemsCreate" },
+                "type": "array"
+              },
+              { "type": "null" }
+            ],
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "title": "ResourceRequestsUpdate"
+      },
+      "TestCreate": {
+        "properties": {
+          "record_type": {
+            "type": "string",
+            "enum": [
+              "functional_test",
+              "safety_test",
+              "calibration",
+              "performance_test",
+              "commissioning"
+            ],
+            "title": "Record Type"
+          },
+          "test_result": {
+            "type": "string",
+            "enum": ["pass", "fail"],
+            "title": "Test Result"
+          },
+          "test_details": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Test Details"
+          }
+        },
+        "type": "object",
+        "required": ["record_type", "test_result"],
+        "title": "TestCreate"
+      },
+      "UpdateUserRequest": {
+        "properties": {
+          "role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": ["clinical_staff", "biomedical_engineer"]
+              },
+              { "type": "null" }
+            ],
+            "title": "Role"
+          },
+          "department_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Department Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "UpdateUserRequest"
+      },
+      "UserOut": {
+        "properties": {
+          "user_id": { "type": "string", "format": "uuid", "title": "User Id" },
+          "full_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Full Name"
+          },
+          "email": { "type": "string", "title": "Email" },
+          "role": { "$ref": "#/components/schemas/UserRole" },
+          "department_id": {
+            "anyOf": [
+              { "type": "string", "format": "uuid" },
+              { "type": "null" }
+            ],
+            "title": "Department Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "invited", "invite_expired", "revoked"],
+            "title": "Status"
+          },
+          "invitation_expires_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Invitation Expires At"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "full_name",
+          "email",
+          "role",
+          "department_id",
+          "status",
+          "invitation_expires_at",
+          "created_at"
+        ],
+        "title": "UserOut",
+        "description": "What the dashboard shows about a user. Never the password hash or tokens."
+      },
+      "UserRole": {
+        "type": "string",
+        "enum": ["clinical_staff", "biomedical_engineer", "health_manager"],
+        "title": "UserRole"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": { "type": "string", "title": "Message" },
+          "type": { "type": "string", "title": "Error Type" },
+          "input": { "title": "Input" },
+          "ctx": { "type": "object", "title": "Context" }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

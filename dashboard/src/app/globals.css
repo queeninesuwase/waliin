@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+/* Waliin colours. Tailwind turns each one into classes like bg-brand. */
+@theme {
+  --color-brand: #650d2f;
+  --color-brand-dark: #4e0a25;
+  --color-gold: #d9a00a;
+  --color-cream: #fbfaf7;
+  --color-rose: #e8b4c0;
+  --color-background: #fbfaf7;
+  --color-foreground: #171717;
+}
+
+:root {
+  --background: #fbfaf7;
+  --foreground: #171717;
+  --font-geist-sans: "Geist", sans-serif;
+  --font-geist-mono: "Geist Mono", monospace;
+}
+
+html,
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans);
+}
+
+body {
+  margin: 0;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+html.dark {
+  --background: #15110f;
+  --foreground: #ece6e3;
+  --color-background: #15110f;
+  --color-foreground: #ece6e3;
+  --color-cream: #1f1916;
+  --color-rose: #4a2a33;
+  --color-gray-50: #1c1715;
+  --color-gray-100: #26201d;
+  --color-gray-200: #352d29;
+  --color-gray-300: #4a403b;
+  --color-gray-400: #8a7f79;
+  --color-gray-500: #a89d97;
+  --color-gray-600: #c2b8b2;
+  --color-gray-700: #d6cdc8;
+  --color-gray-800: #e6dfdb;
+  --color-gray-900: #f3eeeb;
+  color-scheme: dark;
+}
+
+html.dark .bg-white {
+  background-color: #1e1916;
+}
+
+html.dark .text-brand,
+html.dark .hover\:text-brand:hover {
+  color: #f2a7bd;
+}
+
+html.dark .border-brand {
+  border-color: #c76a87;
+}
+
+html.dark .text-foreground {
+  color: #ece6e3;
+}
+
+html.dark input,
+html.dark select,
+html.dark textarea {
+  color: #ece6e3;
+}
+
+html.dark .bg-green-50 {
+  background-color: #12301f;
+}
+
+html.dark .text-green-700,
+html.dark .text-green-800 {
+  color: #86e0a8;
+}

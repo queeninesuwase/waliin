@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f8f6f3;
+  --foreground: #263449;
+}
+
+/* Waliin brand colours, used as Tailwind classes like bg-brand or text-accent */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand: #650d30;
+  --color-brand-dark: #4f0a25;
+  --color-accent: #d2a52c;
+  --color-muted: #263449;
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+html.dark {
+  --background: #15110f;
+  --foreground: #ece6e3;
+  --color-background: #15110f;
+  --color-foreground: #ece6e3;
+  --color-muted: #a89d97;
+  --color-gray-50: #1c1715;
+  --color-gray-100: #26201d;
+  --color-gray-200: #352d29;
+  --color-gray-300: #4a403b;
+  --color-gray-400: #8a7f79;
+  --color-gray-500: #a89d97;
+  --color-gray-600: #c2b8b2;
+  --color-gray-700: #d6cdc8;
+  --color-gray-800: #e6dfdb;
+  --color-gray-900: #f3eeeb;
+  color-scheme: dark;
+}
+
+html.dark .bg-white,
+html.dark .bg-\[\#fff7f8\],
+html.dark .bg-\[\#fbf9f5\],
+html.dark .bg-\[\#fbfaf7\] {
+  background-color: #1e1916;
+}
+
+html.dark .bg-\[\#F8F6F3\],
+html.dark .bg-\[\#f8f6f3\] {
+  background-color: #15110f;
+}
+
+html.dark .text-\[\#263346\],
+html.dark .text-\[\#303d51\],
+html.dark .text-\[\#39465a\],
+html.dark .text-\[\#263449\],
+html.dark .text-\[\#1c2434\],
+html.dark .text-foreground {
+  color: #ece6e3;
+}
+
+html.dark .text-\[\#7b8796\],
+html.dark .text-\[\#8994a5\] {
+  color: #a89d97;
+}
+
+html.dark .text-brand,
+html.dark .text-\[\#650d2f\],
+html.dark .text-\[\#650D30\],
+html.dark .text-\[\#8a1238\],
+html.dark .text-\[\#9b0038\] {
+  color: #f2a7bd;
+}
+
+html.dark .border-\[\#e8b4c0\],
+html.dark .border-\[\#E8B9C7\],
+html.dark .border-\[\#e4b6c3\],
+html.dark .border-\[\#efb8c2\],
+html.dark .border-\[\#efcbd1\],
+html.dark .border-\[\#f1e6e5\] {
+  border-color: #4a2a33;
+}
+
+html.dark .border-\[\#650d2f\],
+html.dark .border-\[\#650D30\] {
+  border-color: #c76a87;
+}
+
+html.dark input,
+html.dark select,
+html.dark textarea {
+  color: #ece6e3;
+}
+
+html.dark .bg-green-50 {
+  background-color: #12301f;
+}
+
+html.dark .text-green-700,
+html.dark .text-green-800 {
+  color: #86e0a8;
+}
